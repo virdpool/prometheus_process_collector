@@ -24,10 +24,12 @@
 
 #define UNUSED(x) (void)(x)
 
+#include "win_fix.h"
+
 struct prometheus_process_info
 {
   int fds_total;
-  rlim_t fds_limit;
+  uintmax_t fds_limit;
   time_t start_time_seconds;
   long uptime_seconds;
   int threads_total;
