@@ -24,25 +24,33 @@
 #endif
 
 #include "prometheus_exceptions.h"
+#include "win_fix.h"
 
 #define UNUSED(x) (void)(x)
+
 
 namespace Prometheus
 {
     class ProcessInfo
     {
     private:
-        static struct rlimit get_process_limit(int resource)
+#ifdef _MSC_VER
+        void set_rusage()
         {
-            struct rlimit rlp;
-            if (getrlimit(resource, &rlp))
-            {
-                throw ProcessInfoException();
-            }
-
-            return rlp;
-        };
-
+            // TODO
+            utime_seconds = 0;
+            stime_seconds = 0;
+            max_rm_bytes = 0;
+            noio_pagefaults_total = 0;
+            io_pagefaults_total = 0;
+            swaps_total = 0;
+            disk_reads_total = 0;
+            disk_writes_total = 0;
+            signals_delivered_total = 0;
+            voluntary_context_switches_total = 0;
+            involuntary_context_switches_total = 0;
+        }
+#else
         void set_rusage()
         {
             struct rusage rusage;
@@ -59,12 +67,31 @@ namespace Prometheus
             voluntary_context_switches_total = rusage.ru_nvcsw;
             involuntary_context_switches_total = rusage.ru_nivcsw;
         };
+#endif
 
+
+#ifdef _MSC_VER
+        void set_fds_limit()
+        {
+            fds_limit = _getmaxstdio(); // Approx
+        };
+#else
+        static struct rlimit get_process_limit(int resource)
+        {
+            struct rlimit rlp;
+            if (getrlimit(resource, &rlp))
+            {
+                throw ProcessInfoException();
+            }
+
+            return rlp;
+        };
         void set_fds_limit()
         {
             const auto &fds_rlimit = get_process_limit(RLIMIT_NOFILE);
             fds_limit = fds_rlimit.rlim_cur;
         };
+#endif
 
         int get_fds_total();
         void set_proc_stat();

@@ -1,0 +1,10 @@
+{OsType, _skip} = os:type(),
+Artifact = case OsType of
+    win32 ->
+        {artifacts, ["priv/prometheus_process_collector.lib", "priv/prometheus_process_collector.dll"]};
+    _ ->
+        {artifacts, ["priv/prometheus_process_collector.so"]}
+end,
+Config1 = CONFIG ++ [
+    Artifact
+].
