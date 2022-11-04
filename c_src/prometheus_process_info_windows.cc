@@ -75,8 +75,8 @@ namespace Prometheus
     //     return std::stoul(stat[index]);
     // }
     // 
-    // int ProcessInfo::get_fds_total()
-    // {
+    int ProcessInfo::get_fds_total()
+    {
     //     static char fd_path[32];
     // 
     //     std::sprintf(fd_path, "/proc/%d/fd", pid);
@@ -99,8 +99,10 @@ namespace Prometheus
     // 
     //     closedir(dirp);
     //     return file_total;
-    // }
-    // 
+        // TODO FIXME
+        return 0;
+    }
+    
     void ProcessInfo::set_proc_stat()
     {
         long ticks = clk_tck();
