@@ -1,4 +1,4 @@
-#include "erl_nif.h"
+#include <erl_nif.h>
 #include <unistd.h>
 
 #include "prometheus_process_collector.h"
