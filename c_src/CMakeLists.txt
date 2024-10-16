@@ -9,7 +9,7 @@ prometheus_process_info_windows.cc
 prometheus_process_collector_nif.cc)
 
 
-include_directories("c:/Program Files/erl-24.3.4.6/usr/include")
+include_directories("c:/Program Files/erl-24.3.4.17/usr/include")
 
 # credits https://github.com/georgegerdin/nuklear-examples-vcpkg/blob/master/unistd.h
 include_directories("win")
